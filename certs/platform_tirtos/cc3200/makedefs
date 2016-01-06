@@ -1,0 +1,64 @@
+#
+#  Copyright (c) 2015, Texas Instruments Incorporated
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  *  Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#
+#  *  Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  *  Neither the name of Texas Instruments Incorporated nor the names of
+#     its contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+#  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+#  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+#  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+CODEGEN_INSTALL_DIR = $(TI_ARM_CODEGEN_INSTALL_DIR)
+CC = $(CODEGEN_INSTALL_DIR)/bin/armcl
+LD = $(CODEGEN_INSTALL_DIR)/bin/armcl -z
+
+XDCPATH = $(NS_INSTALL_DIR)/packages/;$(BIOS_INSTALL_DIR)/packages;$(TIRTOS_INSTALL_DIR)/packages;$(UIA_INSTALL_DIR)/packages;
+CONFIGURO = $(XDC_INSTALL_DIR)/xs --xdcpath="$(XDCPATH)" xdc.tools.configuro
+
+TARGET = ti.targets.arm.elf.M4
+PLATFORM = ti.platforms.simplelink:CC3200
+PROFILE = release
+
+CFLAGS = -eo=.o -mv7M4 --float_support=vfplib --abi=eabi -me -ms --c99 -I$(CODEGEN_INSTALL_DIR)/include -I$(CCWARE_INSTALL_DIR) -I$(CCWARE_INSTALL_DIR)/inc -I$(CCWARE_INSTALL_DIR)/driverlib -I$(CC3200SDK_INSTALL_DIR)/oslib -I$(CC3200SDK_INSTALL_DIR)/ti_rtos -I$(CC3200SDK_INSTALL_DIR)/simplelink -I$(CC3200SDK_INSTALL_DIR)/simplelink/include -I$(CC3200SDK_INSTALL_DIR)/simplelink/source -Dccs -DPART_CC3200 -DCCWARE -DSL_FULL -DSL_PLATFORM_MULTI_THREADED -DNET_SL
+
+LFLAGS = --rom_model --warn_sections -i$(CODEGEN_INSTALL_DIR)/lib --reread_libs -l$(CC3200SDK_INSTALL_DIR)/simplelink/ccs/OS/simplelink.a -l$(CC3200SDK_INSTALL_DIR)/oslib/ccs/ti_rtos/ti_rtos.a -l$(CCWARE_INSTALL_DIR)/driverlib/ccs/Release/driverlib.a -llibc.a
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c $<
+
+% : %.cfg
+	$(CONFIGURO) -c $(CODEGEN_INSTALL_DIR) -t $(TARGET) -p $(PLATFORM) -r $(PROFILE) $<
+
+ifeq ("$(SHELL)","sh.exe")
+#For Windows
+        RMDIR  = rmdir /S /Q
+        remove = del $(subst /,\,$1)
+        binconv = tools/elf2cc32.exe
+else
+#For Linux
+        RMDIR  = rm -rf
+        remove = rm -f $1
+        binconv = tools/elf2cc32
+endif

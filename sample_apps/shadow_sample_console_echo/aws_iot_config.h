@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@
 #define AWS_IOT_MQTT_PORT              8883 ///< default port for MQTT/S
 #define AWS_IOT_MQTT_CLIENT_ID         "c-sdk-client-id" ///< MQTT client ID should be unique for every device
 #define AWS_IOT_MY_THING_NAME 		   "AWS-IoT-C-SDK" ///< Thing Name of the Shadow this device is associated with
-#define AWS_IOT_ROOT_CA_FILENAME       "aws-iot-rootCA.crt" ///< Root CA file name
-#define AWS_IOT_CERTIFICATE_FILENAME   "cert.pem" ///< device signed certificate file name
-#define AWS_IOT_PRIVATE_KEY_FILENAME   "privkey.pem" ///< Device private key filename
+#define AWS_IOT_ROOT_CA_FILENAME       "/cert/cacert.der" ///< Root CA file name
+#define AWS_IOT_CERTIFICATE_FILENAME   "/cert/clientcert.der" ///< device signed certificate file name
+#define AWS_IOT_PRIVATE_KEY_FILENAME   "/cert/clientkey.der" ///< Device private key filename
 // =================================================
 
 // MQTT PubSub
