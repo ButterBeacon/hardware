@@ -44,7 +44,6 @@ While not strictly required, we recommend that you install the following tools f
     CC3200SDK_INSTALL_DIR ?= C:/ti/CC3200SDK_1.1.0/cc3200-sdk
     TI_ARM_CODEGEN_INSTALL_DIR ?= C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5
     ```
-
 2. If you are using Windows, open a Windows command prompt. If you are using Linux, open a terminal window.
 
 Before building a specific application, complete the following steps (we are referring to the `subscribe_publish_sample` application here, but the same procedure applies to other samples as well):
@@ -64,6 +63,8 @@ Before building a specific application, complete the following steps (we are ref
 4. From the directory `<AWS_INSTALL_DIR>/sample_apps/subscribe_publish_sample/platform_tirtos/cc3200/`, Open the file `main.c`. Search for "USER STEP" and update the current date-time macros.
 
 5. Open the file `wificonfig.h`. Search for "USER STEP" and update the WIFI SSID and SECURITY_KEY macros.
+
+6. TI ARM compiler builds the C runtime library during the first application build which requires ```gmake``` on the environment path. It is recommended ```gmake``` tool is installed on your machine and added to the path. Alternately, XDCtools product (```C:/ti/xdctools_3_31_01_33_core```) which also contains ```gmake``` can be added to the path. But note, it is recommended that the XDCtools is removed from the path after the libraries are built. This is to avoid conflicts when you use newer versions of XDCtools. For detailed information about building TI ARM C runtime library, please read the [Mklib wiki](http://processors.wiki.ti.com/index.php/Mklib).
 
 On the command line, enter the following commands to build the application:
 
